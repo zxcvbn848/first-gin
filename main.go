@@ -23,19 +23,26 @@ var albums = []album{
 	{ID: "3", Title: "Sarah Vaughan and C", Artist: "Sarah Vaughan", Price: 39.99},
 }
 
+// getAlbums responds with the list of all albums as JSON.
+func getAlbums(c *gin.Context) {
+	c.IndentedJSON(http.StatusOK, albums)
+}
+
 func main() {
 	// Create a Gin router with default middleware (logger and recovery)
-	r := gin.Default()
+	router := gin.Default()
 
 	// Define a simple GET endpoint
-	r.GET("/ping", func(c *gin.Context) {
+	router.GET("/ping", func(c *gin.Context) {
 		// Return JSON response
 		c.JSON(http.StatusOK, gin.H{
 			"message": "pong",
 		})
 	})
 
+	router.GET("/albums", getAlbums)
+
 	// Start server on port 8080 (default)
 	// Server will listen on 0.0.0.0:8080 (localhost:8080 on Windows)
-	r.Run()
+	router.Run()
 }
