@@ -23,6 +23,21 @@ var albums = []album{
 	{ID: "3", Title: "Sarah Vaughan and C", Artist: "Sarah Vaughan", Price: 39.99},
 }
 
+// postAlbums adds an album from JSON received in the request body.
+func postAlbums(c *gin.Context) {
+	var newAlbum album
+
+	// Call BindJSON to bind the received JSON to
+	// newAlbum.
+	if err := c.BindJSON(&newAlbum); err != nil {
+		return
+	}
+
+	// Add the new album to the slice.
+	albums = append(albums, newAlbum)
+	c.IndentedJSON(http.StatusCreated, newAlbum)
+}
+
 // getAlbums responds with the list of all albums as JSON.
 func getAlbums(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, albums)
@@ -41,6 +56,7 @@ func main() {
 	})
 
 	router.GET("/albums", getAlbums)
+	router.POST("/albums", postAlbums)
 
 	// Start server on port 8080 (default)
 	// Server will listen on 0.0.0.0:8080 (localhost:8080 on Windows)
